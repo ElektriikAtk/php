@@ -13,53 +13,42 @@
   <?php
   $root = "./";
   $path_arr = array("$root");
-  $n = 0;
-  if (isset($_GET["dest"])) {
+  $loop = 0;
+  if (isset($_GET["dest"]) and $loop == 0) {
+    echo "<h2>loop 0</h2>";
     $dest = $_GET["dest"];
     array_push($path_arr, $dest);
     $path = join("", $path_arr);
-    $path_arr_new = $path_arr;
-    $n += 1;
+    $loop = 1;
     $_GET["dest"] = NULL;
-    if (isset($_GET["dest"]) and $n > 0) {
-      $dest = $_GET["dest"];
-      array_push($path_arr_new, $dest);
-      $path = join("", $path_arr_new);
-      $_GET["dest"] = NULL;
-    }
+  } elseif (isset($_GET["dest"]) and $loop == 1) {
+    echo "<h2>loop dest</h2>";
+    echo "dest = [$dest]";
+    $path_arr_next = array("$path");
+    array_push($path_arr_next, $dest);
+    $path = join("", $path_arr_next);
+    print_r($path_arr_next); 
+    $_GET["dest"] = NULL;
+    $loop = NULL;
   } else {
     $path = $root;
   }
+
+
+
+  echo $loop;
+  echo " & ";
+  var_dump($_GET["dest"]);
+
+
+  echo "<p>";
   echo $path;
-
-/*   if (isset($_GET["dest"]) and !isset($path_arr_new)) {
-    $dir = $_GET["dest"];
-    array_push($path_arr, $dir);
-    #echo"<p>in</p>";
-    #echo $_GET["dest"]."<br>";
-    #$_GET["dest"] = NULL;
-    #var_dump($_GET["dest"]);
-    $dir = join("/", $path_arr);
-    $path_arr_new = $path_arr;
-    #echo "kakaa";
-    if (isset($_GET["dest"]) and isset($path_arr_new)) {
-      #echo "isset";
-      print_r($path_arr_new);
-      array_push($path_arr_new, $dir);
-      $dir = join("/", $path_arr);
-      #$dir = $path_arr_new;
-      $_GET["dest"] = NULL;
-      }
-  } else {
-    $dir = $root;
-  } */
-
+  echo "</p>";
   echo "<p>";
   print_r($path_arr);
   echo "</p>";
-  #echo "<p>out</p>";
-  #var_dump($_GET["dest"]);
 
+  
   $dir_scan = scandir($path);
 
   foreach ($dir_scan as $item) {
